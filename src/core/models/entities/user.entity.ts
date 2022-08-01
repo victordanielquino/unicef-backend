@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+
 export class UserEntity {
   private _id: number;
   private _username: string;
@@ -5,7 +7,7 @@ export class UserEntity {
   private _enabled: boolean;
   private _intent: number;
   private _state: string;
-  private _ant_id: string;
+  private _ant_id: number;
 
   constructor() {}
 
@@ -57,11 +59,11 @@ export class UserEntity {
     this._state = value;
   }
 
-  get ant_id(): string {
+  get ant_id(): number {
     return this._ant_id;
   }
 
-  set ant_id(value: string) {
+  set ant_id(value: number) {
     this._ant_id = value;
   }
 }
