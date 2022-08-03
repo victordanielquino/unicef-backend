@@ -1,6 +1,7 @@
 export * from './user-create.dto';
 export * from './user-update.dto';
 export * from './user-read.dto';
+export * from './user-auth.dto';
 
 export * from './role-read.dto';
 export * from './role-create.dto';

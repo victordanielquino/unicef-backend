@@ -1,23 +1,9 @@
-import {
-  IsString,
-  IsNotEmpty,
-  Length,
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Exclude,
-  Expose,
-  plainToClass,
-  Transform,
-  Type,
-} from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { RoleReadDto } from './role-read.dto';
-import { number } from 'joi';
 
-export class UserReadDto {
+export class UserAuthDto {
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty({ description: 'the id of user' })
@@ -34,8 +20,8 @@ export class UserReadDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  @Exclude()
-  readonly password: string;
+  @Expose()
+  password: string;
 
   @IsString()
   @IsNotEmpty()
@@ -47,7 +33,7 @@ export class UserReadDto {
   @IsNotEmpty()
   @ApiProperty()
   @Type(() => Number)
-  @Expose({ name: 'ant_id' })
+  @Exclude()
   readonly antId: number;
 
   @IsOptional()

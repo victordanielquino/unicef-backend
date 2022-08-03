@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Client } from 'pg';
+import * as bcrypt from 'bcrypt';
 
 import { UsersServiceInterface } from './inteface/users.service.interface';
 import {
@@ -17,6 +18,8 @@ import {
 import { UsersRepository } from '../repository/users.repository';
 import { RolesService } from './roles.service';
 import { UsersRolesService } from './users-roles.service';
+import { UserEntity } from '../../../core/models/entities';
+import { UserAuthDto } from '../dtos/user-auth.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -56,6 +59,7 @@ export class UsersService implements UsersServiceInterface {
       userDto.roleId,
     );
 
+    userDto.password = await bcrypt.hash(userDto.password, 10);
     const user = await this._usersRepo.createOne(userDto);
     user.role = role;
     return user;
@@ -65,8 +69,17 @@ export class UsersService implements UsersServiceInterface {
     return Promise.resolve(undefined);
   }
 
-  getOneByUsername(username: string): Promise<UserReadDto> {
-    return Promise.resolve(undefined);
+  async getOneByUsername(username: string): Promise<UserAuthDto> {
+    const user: UserAuthDto = await this._usersRepo.getOneByUsername(username);
+    if (!user)
+      throw new NotFoundException(
+        `User con username: ${username} not exist or not authorized`,
+      );
+    const userRole: UserRoleReadDto = await this._urService.getOneByUserId(
+      user.id,
+    );
+    user.role = await this._rolesService.getOneById(userRole.roleId);
+    return user;
   }
 
   updateOneById(id: number, user: UserUpdateDto): Promise<UserReadDto> {

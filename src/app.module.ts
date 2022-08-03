@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AccessControlModule } from 'nest-access-control';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +10,7 @@ import { enviroments } from './common/config/enviroments';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import config from './common/config/config';
+import { roles } from './app.roles';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import config from './common/config/config';
         DATABASE_URL: Joi.string().required(),
       }),
     }),
+    AccessControlModule.forRoles(roles),
     DatabaseModule,
     UsersModule,
     AuthModule,

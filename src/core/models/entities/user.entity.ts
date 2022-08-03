@@ -1,5 +1,3 @@
-import { Expose } from 'class-transformer';
-
 export class UserEntity {
   private _id: number;
   private _username: string;
